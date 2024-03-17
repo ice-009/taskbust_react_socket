@@ -34,17 +34,24 @@ const App = () => {
           }
         );
         const data = await response.json();
-        const { namespaceName } = data;
+
+        const { communityName } = data;
+        console.log("Created namespace:", communityName);
+
 
         // Connect to the dynamically created namespace
-        const socket = io(`${SOCKET_SERVER_URL}/${namespaceName}`);
 
-        socket.on("connect", () => {
-          console.log(`Connected to namespace ${namespaceName}`);
+        const socket2 = io(`${SOCKET_SERVER_URL}/${communityName}`);
+        console.log("ccc", `${SOCKET_SERVER_URL}/${communityName}`)
+        socket2.on("connected", (data) => {
+          console.log(
+            'Connected to namespace ', data);
         });
 
-        socket.on("disconnect", () => {
-          console.log(`Disconnected from namespace ${namespaceName}`);
+
+
+        socket2.on("disconnect", () => {
+          console.log(`Disconnected from namespace ${communityName}`);
         });
 
         // Handle other events or logic specific to this namespace
@@ -54,7 +61,7 @@ const App = () => {
     };
 
     // Connect to the default namespace
-    connectToDefaultNamespace();
+    // connectToDefaultNamespace();
 
     // Create and join the new namespace
     createAndJoinNamespace();
